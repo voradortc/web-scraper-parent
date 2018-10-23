@@ -1,0 +1,4 @@
+https://www.google.com
+https://www.microsoft.com
+https://www.oracle.com
+this.is.not.a.url
