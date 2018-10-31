@@ -29,8 +29,9 @@
         <resources.encoding>UTF-8</resources.encoding>
         <resources.version>3.1.0</resources.version>
         <slf4j.version>1.7.25</slf4j.version>
-        <spring.version>2.0.6.RELEASE</spring.version>
         <spring.test.version>5.1.1.RELEASE</spring.test.version>
+        <spring.version>2.0.6.RELEASE</spring.version>
+        <surefire.version>2.22.1</surefire.version>
     </properties>
 
     <build>
@@ -57,10 +58,6 @@
                 <artifactId>maven-surefire-plugin</artifactId>
                 <version>2.22.1</version>
                 <configuration>
-                    <additionalClasspathElements>
-                        <additionalClasspathElement>path/to/additional/resources</additionalClasspathElement>
-                        <additionalClasspathElement>path/to/additional/jar</additionalClasspathElement>
-                    </additionalClasspathElements>
                     <classpathDependencyExcludes>
                         <classpathDependencyExclude>ch.qos.logback:logback-classic</classpathDependencyExclude>
                     </classpathDependencyExcludes>
@@ -89,35 +86,21 @@
                 <type>jar</type>
             </dependency>
             <dependency>
-                <groupId>net.sourceforge.htmlunit</groupId>
-                <artifactId>htmlunit</artifactId>
-                <version>2.33</version>
-                <scope>compile</scope>
-                <type>jar</type>
-            </dependency>
-            <dependency>
                 <groupId>javax.inject</groupId>
                 <artifactId>javax.inject</artifactId>
                 <version>1</version>
                 <scope>compile</scope>
                 <type>jar</type>
             </dependency>
+            <dependency>
+                <groupId>net.sourceforge.htmlunit</groupId>
+                <artifactId>htmlunit</artifactId>
+                <version>2.33</version>
+                <scope>compile</scope>
+                <type>jar</type>
+            </dependency>
 
             <!-- Testing dependencies -->
-            <dependency>
-                <groupId>org.springframework</groupId>
-                <artifactId>spring-test</artifactId>
-                <version>${spring.test.version}</version>
-                <scope>test</scope>
-                <type>jar</type>
-            </dependency>
-            <dependency>
-                <groupId>org.mockito</groupId>
-                <artifactId>mockito-core</artifactId>
-                <version>2.23.0</version>
-                <scope>test</scope>
-                <type>jar</type>
-            </dependency>
             <dependency>
                 <groupId>junit</groupId>
                 <artifactId>junit</artifactId>
@@ -132,11 +115,18 @@
                 <scope>test</scope>
                 <type>jar</type>
             </dependency>
+            <dependency>
+                <groupId>org.mockito</groupId>
+                <artifactId>mockito-core</artifactId>
+                <version>2.23.0</version>
+                <scope>test</scope>
+                <type>jar</type>
+            </dependency>
         </dependencies>
     </dependencyManagement>
 
     <dependencies>
-        <!-- Common dependencies go here -->
+        <!-- Common dependencies -->
         <dependency>
             <groupId>org.slf4j</groupId>
             <artifactId>slf4j-api</artifactId>
