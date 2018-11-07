@@ -1,7 +1,7 @@
 package com.belatrix.webscraper.api.input;
 
 import java.io.IOException;
-import java.net.URL;
+import java.net.URI;
 import java.util.Set;
 
 /**
@@ -17,5 +17,5 @@ public interface UrlListLoader {
      * @return the set of URLs that were found on the input file
      * @throws IOException I/O exceptions are thrown when the input files cannot be read or found
      */
-    Set<URL> loadURLsFromTextFile( String path ) throws IOException;
+    Set<URI> loadURLsFromTextFile( String path ) throws IOException;
 }

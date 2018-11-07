@@ -17,8 +17,7 @@ public class PatternTokenOutputExtractorImpl implements PatternTokenOutputExtrac
 
     @Override
     public void createTokenExtractorOutputFile( Set<String> tokens, String path ) throws IOException {
-        if ( Objects.isNull( path ) )
-            throw new NullPointerException( "Path is null" );
+        Objects.requireNonNull( path, "Path is null" );
 
         if ( EMPTY.equals( path ) )
             throw new NoSuchFileException( "Path to file is empty" );

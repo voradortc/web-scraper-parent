@@ -1,7 +1,7 @@
 package com.belatrix.webscraper.processor;
 
 import com.belatrix.webscraper.api.processor.OutputTokenProcessor;
-import org.junit.Assert;
+import static org.junit.Assert.*;
 import org.junit.Test;
 
 import java.util.regex.Pattern;
@@ -14,22 +14,22 @@ public class OutputTokenProcessorImplTest {
     private OutputTokenProcessor service = new OutputTokenProcessorImpl();
 
     @Test( expected = NullPointerException.class )
-    public void nullPatternProcessorTest() {
+    public void getMatchingTokensInBufferNullPatternProcessorTest() {
         service.getMatchingTokensInBuffer( null, new StringBuilder() );
     }
 
     @Test( expected = NullPointerException.class )
-    public void nullBufferProcessorTest() {
+    public void getMatchingTokensInBufferNullBufferProcessorTest() {
         service.getMatchingTokensInBuffer( Pattern.compile( EMPTY ), null );
     }
 
     @Test
-    public void emptyPatternProcessorTest() {
-        Assert.assertEquals( 1, service.getMatchingTokensInBuffer( Pattern.compile( EMPTY ), new StringBuilder( EMPTY ) ).size() );
+    public void getMatchingTokensInBufferEmptyPatternProcessorTest() {
+        assertEquals( 1, service.getMatchingTokensInBuffer( Pattern.compile( EMPTY ), new StringBuilder( EMPTY ) ).size() );
     }
 
     @Test
-    public void somePatternProcessorTest() {
-        Assert.assertEquals( 2, service.getMatchingTokensInBuffer( Pattern.compile( SOME_REGEX ), new StringBuilder( SOME_BUFFER ) ).size() );
+    public void getMatchingTokensInBufferSomePatternProcessorTest() {
+        assertEquals( 2, service.getMatchingTokensInBuffer( Pattern.compile( SOME_REGEX ), new StringBuilder( SOME_BUFFER ) ).size() );
     }
 }

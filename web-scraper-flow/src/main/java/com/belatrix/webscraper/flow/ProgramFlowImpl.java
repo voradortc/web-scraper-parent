@@ -11,7 +11,8 @@ import org.slf4j.LoggerFactory;
 
 import javax.inject.Inject;
 import java.io.IOException;
-import java.net.URL;
+import java.net.URI;
+import java.util.Objects;
 import java.util.Set;
 import java.util.concurrent.BrokenBarrierException;
 import java.util.concurrent.CopyOnWriteArraySet;
@@ -44,6 +45,9 @@ public class ProgramFlowImpl implements ProgramFlow {
     private String patternPath;
 
     public ProgramFlowImpl( String outputPrefix, String patternPath ) {
+        Objects.requireNonNull( outputPrefix, "The output directory path cannot be null" );
+        Objects.requireNonNull( patternPath, "The pattern location path cannot be null" );
+
         this.outputPrefix = outputPrefix;
         this.patternPath = patternPath;
     }
@@ -51,7 +55,7 @@ public class ProgramFlowImpl implements ProgramFlow {
     @Override
     public void scraperFlow( String urlPath ) throws IOException {
         logger.info( "Loading URLs from '{}'", urlPath );
-        Set<URL> urls = urlListLoader.loadURLsFromTextFile( urlPath );
+        Set<URI> urls = urlListLoader.loadURLsFromTextFile( urlPath );
 
         logger.info( "Loading patterns from '{}'", patternPath );
         Set<Pattern> patterns = patternLoader.loadPatternsFromDirectory( patternPath );
@@ -69,7 +73,7 @@ public class ProgramFlowImpl implements ProgramFlow {
             return;
         }
 
-        for ( URL url : urls )
+        for ( URI url : urls )
             new Thread( () -> handleURLProcessing( url, patterns, outputs, barrier ), url.getHost() ).start();
 
         barrierWaitForTasks( barrier );
@@ -88,37 +92,26 @@ public class ProgramFlowImpl implements ProgramFlow {
         logger.info( "The extraction task has been completed" );
     }
 
-    private void threadedURLProcessing( URL url, Set<Pattern> patterns, Set<Output> outputs ) {
+    private void handleURLProcessing( URI url, Set<Pattern> patterns, Set<Output> outputs, CyclicBarrier barrier ) {
+        threadedURLProcessing( url, patterns, outputs );
+        barrierWaitForTasks( barrier );
+    }
+
+    private void threadedURLProcessing( URI url, Set<Pattern> patterns, Set<Output> outputs ) {
         logger.info( "Extracting content of the URL '{}'", url );
         StringBuilder buffer = urlContentExtractor.extractURLTextContent( url );
         Set<String> tokens = new CopyOnWriteArraySet<>();
         CyclicBarrier urlBarrier = new CyclicBarrier( patterns.size() );
 
-        for ( Pattern pattern : patterns ) {
+        for ( Pattern pattern : patterns )
             new Thread( () -> threadedPatternProcessing( urlBarrier, tokens, pattern, buffer ) ).start();
-        }
 
         outputs.add( new Output( url, tokens ) );
     }
 
     private void threadedPatternProcessing( CyclicBarrier urlBarrier, Set<String> tokens, Pattern pattern, StringBuilder buffer ) {
-        try {
-            tokens.addAll( outputTokenProcessor.getMatchingTokensInBuffer( pattern, buffer ) );
-        } catch ( Exception e ) {
-            logger.error( e.getLocalizedMessage() );
-        }
-
+        tokens.addAll( outputTokenProcessor.getMatchingTokensInBuffer( pattern, buffer ) );
         barrierWaitForTasks( urlBarrier );
-    }
-
-    private void handleURLProcessing( URL url, Set<Pattern> patterns, Set<Output> outputs, CyclicBarrier barrier ) {
-        try {
-            threadedURLProcessing( url, patterns, outputs );
-        } catch ( Exception e ) {
-            logger.error( e.getLocalizedMessage() );
-        }
-
-        barrierWaitForTasks( barrier );
     }
 
     private void barrierWaitForTasks( CyclicBarrier cyclicBarrier ) {
@@ -133,10 +126,10 @@ public class ProgramFlowImpl implements ProgramFlow {
     }
 
     private static final class Output {
-        private URL url;
+        private URI url;
         private Set<String> tokens;
 
-        Output( URL url, Set<String> tokens ) {
+        private Output( URI url, Set<String> tokens ) {
             this.url = url;
             this.tokens = tokens;
         }

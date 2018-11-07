@@ -1,6 +1,6 @@
 package com.belatrix.webscraper.api.url;
 
-import java.net.URL;
+import java.net.URI;
 
 /**
  * Contract interface that determines the content extractor module
@@ -14,5 +14,5 @@ public interface UrlContentExtractor {
      * @param url the URL for which to extract the contents
      * @return the textual content that was found
      */
-    StringBuilder extractURLTextContent( URL url );
+    StringBuilder extractURLTextContent( URI url );
 }

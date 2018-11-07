@@ -15,14 +15,10 @@ import java.util.regex.Pattern;
 public class OutputTokenProcessorImpl implements OutputTokenProcessor {
     @Override
     public Set<String> getMatchingTokensInBuffer( Pattern pattern, StringBuilder buffer ) {
-        if ( Objects.isNull( pattern ) )
-            throw new NullPointerException( "Pattern is null" );
-
-        if ( Objects.isNull( buffer ) )
-            throw new NullPointerException( "Buffer is null" );
-
-        Matcher matcher = pattern.matcher( buffer );
+        Objects.requireNonNull( pattern, "Pattern is null" );
+        Objects.requireNonNull( buffer, "Buffer is null" );
         Set<String> matches = new HashSet<>();
+        Matcher matcher = pattern.matcher( buffer );
 
         while ( matcher.find() ) {
             matches.add( matcher.group() );
