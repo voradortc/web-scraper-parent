@@ -18,8 +18,6 @@ public class PatternTokenOutputExtractorImplTest {
 
     private PatternTokenOutputExtractor service = new PatternTokenOutputExtractorImpl();
 
-    //can't write to path;
-
     @Test( expected = NullPointerException.class )
     public void createTokenExtractorOutputFileNullPathTest() throws IOException {
         service.createTokenExtractorOutputFile( Collections.emptySet(), null );
