@@ -1,15 +1,17 @@
 package com.belatrix.webscraper.commons;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.function.Executable;
 
 import java.io.FileNotFoundException;
 import java.nio.file.InvalidPathException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
-public class CommonUtilsTest {
+class CommonUtilsTest {
     private static final String COLON = ":";
     private static final String DOT = ".";
     private static final String EMPTY = "";
@@ -17,23 +19,26 @@ public class CommonUtilsTest {
 
     private static final Path BASE = Paths.get( DOT );
 
-    @Test( expected = NullPointerException.class )
-    public void testPathReadabilityPathIsNullTest() throws FileNotFoundException {
-        CommonUtils.testPathReadability( null );
+    @Test
+    void testPathReadabilityPathIsNullTest() {
+        Executable executable = () -> CommonUtils.testPathReadability( null );
+        assertThrows( NullPointerException.class, executable );
     }
 
     @Test
-    public void testPathReadabilityPathIsEmptyTest() throws FileNotFoundException {
+    void testPathReadabilityPathIsEmptyTest() throws FileNotFoundException {
         assertEquals( BASE.normalize().toAbsolutePath(), CommonUtils.testPathReadability( EMPTY ).toAbsolutePath() );
     }
 
-    @Test( expected = InvalidPathException.class )
-    public void testPathReadabilityPathIsNotACorrectPathTest() throws FileNotFoundException {
-        CommonUtils.testPathReadability( COLON );
+    @Test
+    void testPathReadabilityPathIsNotACorrectPathTest() {
+        Executable executable = () -> CommonUtils.testPathReadability( COLON );
+        assertThrows( InvalidPathException.class, executable );
     }
 
-    @Test( expected = FileNotFoundException.class )
-    public void testPathReadabilityPathIsNotReadableTest() throws FileNotFoundException {
-        CommonUtils.testPathReadability( BAD_FILE );
+    @Test
+    void testPathReadabilityPathIsNotReadableTest() {
+        Executable executable = () -> CommonUtils.testPathReadability( BAD_FILE );
+        assertThrows( FileNotFoundException.class, executable );
     }
 }

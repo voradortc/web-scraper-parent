@@ -1,16 +1,19 @@
 package com.belatrix.webscraper.output;
 
 import com.belatrix.webscraper.api.output.PatternTokenOutputExtractor;
-import org.junit.After;
-import static org.junit.Assert.*;
-import org.junit.Test;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.function.Executable;
 
 import java.io.IOException;
 import java.nio.file.*;
 import java.util.Collections;
 import java.util.Set;
 
-public class PatternTokenOutputExtractorImplTest {
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+
+class PatternTokenOutputExtractorImplTest {
     private static final String ALREADY_EXISTS = "./src/test/resources/already-exists.txt";
     private static final String BAD_PATH = ":";
     private static final String NOT_EXISTS = "./src/test/resources/not-exists.txt";
@@ -18,41 +21,45 @@ public class PatternTokenOutputExtractorImplTest {
 
     private PatternTokenOutputExtractor service = new PatternTokenOutputExtractorImpl();
 
-    @Test( expected = NullPointerException.class )
-    public void createTokenExtractorOutputFileNullPathTest() throws IOException {
-        service.createTokenExtractorOutputFile( Collections.emptySet(), null );
-    }
-
-    @Test( expected = NoSuchFileException.class )
-    public void createTokenExtractorOutputFileEmptyPathTest() throws IOException {
-        service.createTokenExtractorOutputFile( Collections.emptySet(), EMPTY );
-    }
-
-    @Test( expected = InvalidPathException.class )
-    public void createTokenExtractorOutputFileBadPathTest() throws IOException {
-        service.createTokenExtractorOutputFile( Collections.emptySet(), BAD_PATH );
-    }
-
-    @Test( expected = FileAlreadyExistsException.class )
-    public void createTokenExtractorOutputFilePathExistsTest() throws IOException {
-        service.createTokenExtractorOutputFile( Collections.emptySet(), ALREADY_EXISTS );
+    @Test
+    void createTokenExtractorOutputFileNullPathTest() {
+        Executable executable = () -> service.createTokenExtractorOutputFile( Collections.emptySet(), null );
+        assertThrows( NullPointerException.class, executable );
     }
 
     @Test
-    public void createTokenExtractorOutputFileNullTokensTest() throws IOException {
+    void createTokenExtractorOutputFileEmptyPathTest() {
+        Executable executable = () -> service.createTokenExtractorOutputFile( Collections.emptySet(), EMPTY );
+        assertThrows( NoSuchFileException.class, executable );
+    }
+
+    @Test
+    void createTokenExtractorOutputFileBadPathTest() {
+        Executable executable = () -> service.createTokenExtractorOutputFile( Collections.emptySet(), BAD_PATH );
+        assertThrows( InvalidPathException.class, executable );
+    }
+
+    @Test
+    void createTokenExtractorOutputFilePathExistsTest() {
+        Executable executable = () -> service.createTokenExtractorOutputFile( Collections.emptySet(), ALREADY_EXISTS );
+        assertThrows( FileAlreadyExistsException.class, executable );
+    }
+
+    @Test
+    void createTokenExtractorOutputFileNullTokensTest() throws IOException {
         service.createTokenExtractorOutputFile( null, NOT_EXISTS );
         assertEquals( 0, amountOfTokensChecker() );
     }
 
     @Test
-    public void createTokenExtractorOutputFileGoodTokensTest() throws IOException {
+    void createTokenExtractorOutputFileGoodTokensTest() throws IOException {
         Set<String> tokens = Set.of( "token-1", "token-2", "token-3" );
         service.createTokenExtractorOutputFile( tokens, NOT_EXISTS );
         assertEquals( 3, amountOfTokensChecker() );
     }
 
-    @After
-    public void tearDown() throws IOException {
+    @AfterEach
+    void tearDown() throws IOException {
         Files.deleteIfExists( Paths.get( NOT_EXISTS ) );
     }
 

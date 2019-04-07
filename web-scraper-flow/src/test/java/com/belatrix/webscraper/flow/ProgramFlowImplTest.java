@@ -6,10 +6,12 @@ import com.belatrix.webscraper.api.output.PatternTokenOutputExtractor;
 import com.belatrix.webscraper.api.pattern.PatternLoader;
 import com.belatrix.webscraper.api.processor.OutputTokenProcessor;
 import com.belatrix.webscraper.api.url.UrlContentExtractor;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.junit.jupiter.api.function.Executable;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.io.IOException;
 import java.net.URI;
@@ -18,10 +20,11 @@ import java.util.Collections;
 import java.util.Set;
 import java.util.regex.Pattern;
 
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.*;
-import static org.mockito.MockitoAnnotations.initMocks;
 
-public class ProgramFlowImplTest {
+@ExtendWith( MockitoExtension.class )
+class ProgramFlowImplTest {
     private static final int ZERO = 0;
     private static final int TIMES = 3;
 
@@ -46,39 +49,32 @@ public class ProgramFlowImplTest {
     @InjectMocks
     private ProgramFlow service = new ProgramFlowImpl( OUTPUT_PATH, EMPTY );
 
-    @Before
-    public void setup() {
-        initMocks( this );
-    }
-
-    @Test( expected = NullPointerException.class )
-    public void programFlowImplNullPathPrefixTest() {
-        new ProgramFlowImpl( null, EMPTY );
-    }
-
-    @Test( expected = NullPointerException.class )
-    public void programFlowImplNullPatternPathTest() {
-        new ProgramFlowImpl( OUTPUT_PATH, null );
+    @Test
+    void programFlowImplNullPathPrefixTest() {
+        Executable executable = () -> new ProgramFlowImpl( null, EMPTY );
+        assertThrows( NullPointerException.class, executable );
     }
 
     @Test
-    public void programFlowImplNoUrlsLoadedTest() throws IOException {
-        initLoadingMocks( Collections.emptySet(), initPatterns(), Collections.emptySet() );
+    void programFlowImplNullPatternPathTest() {
+        Executable executable = () -> new ProgramFlowImpl( OUTPUT_PATH, null );
+        assertThrows( NullPointerException.class, executable );
+    }
 
+    @Test
+    void programFlowImplNoUrlsLoadedTest() throws IOException {
         service.scraperFlow( EMPTY );
         verify( urlContentExtractor, times( ZERO ) ).extractURLTextContent( any() );
     }
 
     @Test
-    public void programFlowImplNoPatternsLoadedTest() throws IOException, URISyntaxException {
-        initLoadingMocks( initURLs(), Collections.emptySet(), Collections.emptySet() );
-
+    void programFlowImplNoPatternsLoadedTest() throws IOException {
         service.scraperFlow( EMPTY );
         verify( urlContentExtractor, times( ZERO ) ).extractURLTextContent( any() );
     }
 
     @Test
-    public void programFlowImplOutputEvenWhenNoTokensTest() throws IOException, URISyntaxException {
+    void programFlowImplOutputEvenWhenNoTokensTest() throws IOException, URISyntaxException {
         initLoadingMocks( initURLs(), initPatterns(), Collections.emptySet() );
 
         service.scraperFlow( EMPTY );
@@ -86,7 +82,7 @@ public class ProgramFlowImplTest {
     }
 
     @Test
-    public void programFlowImplOutputErrorTest() throws IOException, URISyntaxException {
+    void programFlowImplOutputErrorTest() throws IOException, URISyntaxException {
         initLoadingMocks( initURLs(), initPatterns(), Collections.emptySet() );
         doThrow( new IOException( "Some IO Error" ) ).when( patternTokenOutputExtractor ).createTokenExtractorOutputFile( any(), any() );
 
@@ -95,7 +91,7 @@ public class ProgramFlowImplTest {
     }
 
     @Test
-    public void programFlowImplCorrectOutputTest() throws IOException, URISyntaxException {
+    void programFlowImplCorrectOutputTest() throws IOException, URISyntaxException {
         initLoadingMocks( initURLs(), initPatterns(), initTokens() );
 
         service.scraperFlow( EMPTY );
