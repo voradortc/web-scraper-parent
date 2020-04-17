@@ -17,7 +17,7 @@ class UrlContentExtractorImplTest {
     private static final String BAD_PAGE = "http://bad.page.localhost";
     private static final String TEST_HTML = "./src/test/resources/test.html";
 
-    private UrlContentExtractor service = new UrlContentExtractorImpl();
+    private final UrlContentExtractor service = new UrlContentExtractorImpl();
 
     @Test
     void extractURLTextContentNullUrlTest() {

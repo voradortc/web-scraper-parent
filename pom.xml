@@ -27,7 +27,7 @@
         <code.coverage.failureHalt>true</code.coverage.failureHalt>
         <code.coverage.output>target/coverage-reports</code.coverage.output>
         <code.coverage.percentage>0.9</code.coverage.percentage>
-        <compiler.java>13</compiler.java>
+        <compiler.java>8</compiler.java>
         <compiler.version>3.8.1</compiler.version>
         <jacoco.version>0.8.4</jacoco.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>

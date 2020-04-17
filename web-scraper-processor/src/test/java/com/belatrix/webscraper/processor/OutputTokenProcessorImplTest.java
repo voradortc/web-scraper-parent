@@ -14,7 +14,7 @@ class OutputTokenProcessorImplTest {
     private static final String SOME_BUFFER = "Lorem Ipsum";
     private static final String SOME_REGEX = "\\w+";
 
-    private OutputTokenProcessor service = new OutputTokenProcessorImpl();
+    private final OutputTokenProcessor service = new OutputTokenProcessorImpl();
 
     @Test
     void getMatchingTokensInBufferNullPatternProcessorTest() {

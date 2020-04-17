@@ -41,8 +41,8 @@ public class ProgramFlowImpl implements ProgramFlow {
     @Inject
     private PatternTokenOutputExtractor patternTokenOutputExtractor;
 
-    private String outputPrefix;
-    private String patternPath;
+    private final String outputPrefix;
+    private final String patternPath;
 
     public ProgramFlowImpl( String outputPrefix, String patternPath ) {
         Objects.requireNonNull( outputPrefix, "The output directory path cannot be null" );
@@ -126,8 +126,8 @@ public class ProgramFlowImpl implements ProgramFlow {
     }
 
     private static final class Output {
-        private URI url;
-        private Set<String> tokens;
+        private final URI url;
+        private final Set<String> tokens;
 
         private Output( URI url, Set<String> tokens ) {
             this.url = url;

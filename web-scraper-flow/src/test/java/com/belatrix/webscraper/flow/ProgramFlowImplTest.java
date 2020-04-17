@@ -16,7 +16,9 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.util.Arrays;
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.Set;
 import java.util.regex.Pattern;
 
@@ -47,7 +49,7 @@ class ProgramFlowImplTest {
     private PatternTokenOutputExtractor patternTokenOutputExtractor;
 
     @InjectMocks
-    private ProgramFlow service = new ProgramFlowImpl( OUTPUT_PATH, EMPTY );
+    private final ProgramFlow service = new ProgramFlowImpl( OUTPUT_PATH, EMPTY );
 
     @Test
     void programFlowImplNullPathPrefixTest() {
@@ -112,7 +114,7 @@ class ProgramFlowImplTest {
         URI url2 = new URI( "http://www.microsoft.com" );
         URI url3 = new URI( "http://www.oracle.com" );
 
-        return Set.of( url1, url2, url3 );
+        return new HashSet<>( Arrays.asList( url1, url2, url3 ) );
     }
 
     private Set<Pattern> initPatterns() {
@@ -120,10 +122,10 @@ class ProgramFlowImplTest {
         Pattern pattern2 = Pattern.compile( "\\w*" );
         Pattern pattern3 = Pattern.compile( "Lorem[0-9]+" );
 
-        return Set.of( pattern1, pattern2, pattern3 );
+        return new HashSet<>( Arrays.asList( pattern1, pattern2, pattern3 ) );
     }
 
     private Set<String> initTokens() {
-        return Set.of( "Lorem", "ipsum", "dolor", "sit amet, consectetur adipiscing elit." );
+        return new HashSet<>( Arrays.asList( "Lorem", "ipsum", "dolor", "sit amet, consectetur adipiscing elit." ) );
     }
 }

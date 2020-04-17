@@ -16,7 +16,7 @@ class UrlListLoaderImplTest {
     private static final String ERRORS_FILE = "./src/test/resources/errors-test.txt";
     private static final String GOOD_FILE = "./src/test/resources/good-test.txt";
 
-    private UrlListLoader service = new UrlListLoaderImpl();
+    private final UrlListLoader service = new UrlListLoaderImpl();
 
     @Test
     void loadURLsFromTextFileFileIsNotATextFileTest() {

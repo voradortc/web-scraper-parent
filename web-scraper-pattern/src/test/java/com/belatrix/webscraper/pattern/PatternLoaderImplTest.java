@@ -18,7 +18,7 @@ class PatternLoaderImplTest {
     private static final String ERRORS_DIR = "./src/test/resources/errors-test/";
     private static final String GOOD_DIR = "./src/test/resources/good-test/";
 
-    private PatternLoader service = new PatternLoaderImpl();
+    private final PatternLoader service = new PatternLoaderImpl();
 
     @Test
     void loadPatternsFromDirectoryNotADirectoryTest() {

@@ -6,8 +6,14 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.function.Executable;
 
 import java.io.IOException;
-import java.nio.file.*;
+import java.nio.file.FileAlreadyExistsException;
+import java.nio.file.Files;
+import java.nio.file.InvalidPathException;
+import java.nio.file.NoSuchFileException;
+import java.nio.file.Paths;
+import java.util.Arrays;
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -15,11 +21,11 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 
 class PatternTokenOutputExtractorImplTest {
     private static final String ALREADY_EXISTS = "./src/test/resources/already-exists.txt";
-    private static final String BAD_PATH = ":";
+    private static final String BAD_PATH = "\0";
     private static final String NOT_EXISTS = "./src/test/resources/not-exists.txt";
     private static final String EMPTY = "";
 
-    private PatternTokenOutputExtractor service = new PatternTokenOutputExtractorImpl();
+    private final PatternTokenOutputExtractor service = new PatternTokenOutputExtractorImpl();
 
     @Test
     void createTokenExtractorOutputFileNullPathTest() {
@@ -53,7 +59,7 @@ class PatternTokenOutputExtractorImplTest {
 
     @Test
     void createTokenExtractorOutputFileGoodTokensTest() throws IOException {
-        Set<String> tokens = Set.of( "token-1", "token-2", "token-3" );
+        Set<String> tokens = new HashSet<>( Arrays.asList( "token-1", "token-2", "token-3" ) );
         service.createTokenExtractorOutputFile( tokens, NOT_EXISTS );
         assertEquals( 3, amountOfTokensChecker() );
     }

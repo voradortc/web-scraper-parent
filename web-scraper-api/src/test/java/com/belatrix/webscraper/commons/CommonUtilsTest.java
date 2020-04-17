@@ -12,7 +12,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 class CommonUtilsTest {
-    private static final String COLON = ":";
+    private static final String NULL = "\0";
     private static final String DOT = ".";
     private static final String EMPTY = "";
     private static final String BAD_FILE = "./not-a-file";
@@ -32,7 +32,7 @@ class CommonUtilsTest {
 
     @Test
     void testPathReadabilityPathIsNotACorrectPathTest() {
-        Executable executable = () -> CommonUtils.testPathReadability( COLON );
+        Executable executable = () -> CommonUtils.testPathReadability( NULL );
         assertThrows( InvalidPathException.class, executable );
     }
 
